@@ -4,8 +4,10 @@ FROM node:20-alpine
 # Create app directory
 WORKDIR /app
 
-# Copy package files and install dependencies
+# Copy package files first (this helps leverage Docker layer caching)
 COPY package*.json ./
+
+# Install production dependencies
 RUN npm install --production
 
 # Copy the rest of the application code
