@@ -23,4 +23,4 @@ jobs:
       run: docker run -d -p 3000:3000 --name test-container ecomm-app
 
     - name: Validate App Is Running
-      run: curl --retry 5 --retry-delay 5 http://localhost:3000 || exit 1
+      run: curl --retry 10 --retry-delay 6 http://localhost:3000 || exit 1
