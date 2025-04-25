@@ -1,20 +1,26 @@
-# Use a lightweight base image
-FROM node:20-alpine
+name: CI/CD Pipeline
 
-# Create app directory
-WORKDIR /app
+on:
+  push:
+    branches:
+      - devops-branch
 
-# Copy package files first (this helps leverage Docker layer caching)
-COPY package*.json ./
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
 
-# Install production dependencies
-RUN npm install --production
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
 
-# Copy the rest of the application code
-COPY . .
+    - name: Set up Docker
+      uses: docker/setup-buildx-action@v2
 
-# Expose the port
-EXPOSE 3000
+    - name: Build Docker Image
+      run: docker build -t ecomm-app .
 
-# Run the app
-CMD ["node", "server.js"]
+    - name: Run Container for Testing
+      run: sudo docker run -d -p 3000:3000 --name test-container ecomm-app
+
+    - name: Validate App Is Running
+      run: curl --retry 10 --retry-delay 6 http://localhost:3000 || exit 1
