@@ -28,7 +28,7 @@ jobs:
     - name: Print Container Logs (for debugging)
       run: docker logs ecomm-app-container || true
 
-    - name: Validate App Is Running on localhost:8080
+    - name: Validate App Is Running
       run: curl --retry 10 --retry-delay 6 http://localhost:8080 || exit 1
 
     - name: Clean Up Docker Container
