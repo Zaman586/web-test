@@ -1,26 +1,17 @@
-name: CI/CD Pipeline
+# Use a base image
+FROM node:18
 
-on:
-  push:
-    branches:
-      - devops-branch
+# Set working directory
+WORKDIR /app
 
-jobs:
-  build-and-deploy:
-    runs-on: ubuntu-latest
+# Copy project files
+COPY . .
 
-    steps:
-    - name: Checkout Code
-      uses: actions/checkout@v3
+# Install dependencies
+RUN npm install
 
-    - name: Set up Docker
-      uses: docker/setup-buildx-action@v2
+# Expose app port
+EXPOSE 3000
 
-    - name: Build Docker Image
-      run: docker build -t ecomm-app .
-
-    - name: Run Container for Testing
-      run: sudo docker run -d -p 3000:3000 --name test-container ecomm-app
-
-    - name: Validate App Is Running
-      run: curl --retry 10 --retry-delay 6 http://localhost:3000 || exit 1
+# Start the app
+CMD ["npm", "start"]
