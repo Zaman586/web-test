@@ -20,7 +20,7 @@ jobs:
       run: docker build -t ecomm-app .
 
     - name: Run Container for Testing
-      run: docker run -d -p 3000:3000 --name test-container ecomm-app
+      run: docker run -d -p 8080:8080 --name test-container ecomm-app
 
     - name: Wait for App to Start
       run: sleep 10
@@ -29,7 +29,9 @@ jobs:
       run: docker logs test-container || true
 
     - name: Validate App Is Running
-      run: curl --retry 10 --retry-delay 6 http://localhost:3000 || exit 1
+      run: |
+        CONTAINER_IP=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' test-container)
+        curl --retry 10 --retry-delay 6 http://$CONTAINER_IP:8080 || exit 1
 
     - name: Clean Up Docker Container
       if: always()
