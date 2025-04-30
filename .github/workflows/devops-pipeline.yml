@@ -23,7 +23,12 @@ jobs:
       run: docker run -d -p 8080:3000 --name ecomm-app-container ecomm-app
 
     - name: Wait for App to Start
-      run: sleep 10
+      run: |
+        echo "Waiting for the app to be ready..."
+        until curl --retry 10 --retry-delay 6 http://localhost:8080; do
+          echo "Waiting for app to start..."
+          sleep 5
+        done
 
     - name: Print Container Logs (for debugging)
       run: docker logs ecomm-app-container || true
@@ -33,4 +38,6 @@ jobs:
 
     - name: Clean Up Docker Container
       if: always()
-      run: docker rm -f ecomm-app-container || true
+      run: |
+        echo "Cleaning up Docker container..."
+        docker rm -f ecomm-app-container || true
