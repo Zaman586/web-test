@@ -22,5 +22,15 @@ jobs:
     - name: Run Container for Testing
       run: docker run -d -p 3000:3000 --name test-container ecomm-app
 
+    - name: Wait for App to Start
+      run: sleep 10
+
+    - name: Print Container Logs (for debugging)
+      run: docker logs test-container || true
+
     - name: Validate App Is Running
       run: curl --retry 10 --retry-delay 6 http://localhost:3000 || exit 1
+
+    - name: Clean Up Docker Container
+      if: always()
+      run: docker rm -f test-container || true
