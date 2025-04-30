@@ -13,24 +13,24 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v3
 
-    - name: Set up Docker
+    - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
 
     - name: Build Docker Image
       run: docker build -t ecomm-app .
 
-    - name: Run Container for Testing
-      run: docker run -d -p 8080:3000 --name test-container ecomm-app
+    - name: Run Docker Container
+      run: docker run -d -p 8080:3000 --name ecomm-app-container ecomm-app
 
     - name: Wait for App to Start
       run: sleep 10
 
     - name: Print Container Logs (for debugging)
-      run: docker logs test-container || true
+      run: docker logs ecomm-app-container || true
 
-    - name: Validate App Is Running
+    - name: Validate App Is Running on localhost:8080
       run: curl --retry 10 --retry-delay 6 http://localhost:8080 || exit 1
 
     - name: Clean Up Docker Container
       if: always()
-      run: docker rm -f test-container || true
+      run: docker rm -f ecomm-app-container || true
