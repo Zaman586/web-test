@@ -1,18 +1,15 @@
-# Use a base image
 FROM node:18
 
-# Set working directory
 WORKDIR /app
 
-# Copy project files
-COPY . .
+# Copy only package files first for better Docker cache usage
+COPY package*.json ./
 
-# Install dependencies
 RUN npm install
 
-# Expose the port your application runs on
+# Now copy the rest of the project
+COPY . .
+
 EXPOSE 3000
 
-# Define the command to run your application
 CMD ["npm", "start"]
-
