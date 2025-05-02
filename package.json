@@ -1,23 +1,11 @@
 {
   "name": "web-test",
   "version": "1.0.0",
-  "description": "## Overview",
-  "main": "script.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Zaman586/web-test.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Zaman586/web-test/issues"
-  },
-  "homepage": "https://github.com/Zaman586/web-test#readme",
   "dependencies": {
-    "express": "^5.1.0"
+    "express": "^4.18.4"
   }
 }
+
